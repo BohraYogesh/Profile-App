@@ -1,97 +1,194 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# React Native Profiles App
 
-# Getting Started
+## Overview
+This is a **3-page React Native app** built with **JavaScript** and **Redux Toolkit**.  
+Users can **create, edit, and delete profiles** using a multi-step form.  
+All profile data is stored in **Redux** (no backend required).
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+---
 
-## Step 1: Start Metro
+## Features
+- Add new profiles using a **3-step form flow**
+  - Page 1: Basic Info (Full Name, Email, Age)
+  - Page 2: Address Info (City, State, Country)
+  - Page 3: Summary & Submit
+- View all profiles on the **Home screen**
+- Edit or delete any saved profile
+- JavaScript interfaces for type safety
+- Form validation for required fields
+- Navigation using **React Navigation Stack**
+- Responsive design and dark-theme styling 
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+---
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+## Tech Stack
+- **React Native CLI**  
+- **JavaScript (JSX)**  
+- **Redux Toolkit**  
+- **React Navigation Stack**  
+- **react-native-responsive-dimensions**  
+- **AsyncStorage (optional)** 
 
-```sh
-# Using npm
-npm start
+---
 
-# OR using Yarn
-yarn start
-```
+## Installation & Setup
 
-## Step 2: Build and run your app
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/BohraYogesh/Profile-App.git
+   
+Navigate to the project folder:
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+bash
+Copy code
+cd Profile-App
 
-### Android
+Install dependencies:
 
-```sh
-# Using npm
-npm run android
+bash
+Copy code
+npm install
+Run on Android:
 
-# OR using Yarn
-yarn android
-```
+bash
+Copy code
+npx react-native run-android
+(Make sure an emulator or physical device is connected)
 
-### iOS
+## Page Flow
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+### Page 1 – Basic Info
+Fields: Full Name, Email, Age
+Button: Next → Page 2
+Data stored in Redux as draft profile
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+### Page 2 – Address Info
+Fields: City, State, Country
+Buttons: Back → Page 1, Next → Page 3
+Updates draft profile in Redux
 
-```sh
-bundle install
-```
+### Page 3 – Summary
+Displays all collected data
+Buttons: Submit → Save to Redux, Edit → Go Back
 
-Then, and every time you update your native dependencies, run:
+### Home Screen
+Lists all saved profiles
+Each item has Edit / Delete
++ Add Profile starts a new entry
+If no profiles exist, shows “No Profile Data” message
 
-```sh
-bundle exec pod install
-```
+## Redux Example
+import { createSlice } from "@reduxjs/toolkit";
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+const initialState = {
+  profiles: [],
+  draftProfile: {},
+};
 
-```sh
-# Using npm
-npm run ios
+const profileSlice = createSlice({
+  name: "profile",
+  initialState,
+  reducers: {
+    setDraft: (state, action) => {
+      state.draftProfile = { ...state.draftProfile, ...action.payload };
+    },
 
-# OR using Yarn
-yarn ios
-```
+    addProfile: (state) => {
+      const draft = state.draftProfile;
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+      if (
+        !draft.fullName ||
+        !draft.email ||
+        !draft.age ||
+        !draft.city ||
+        !draft.state ||
+        !draft.country
+      ) {
+        return;
+      }
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+      if (draft.id) {
+        // Edit existing profile
+        state.profiles = state.profiles.map((p) =>
+          p.id === draft.id ? { ...p, ...draft } : p
+        );
+      } else {
+        // Add new profile
+        const newProfile = {
+          id: String(Date.now()),
+          fullName: draft.fullName,
+          email: draft.email,
+          age: draft.age,
+          city: draft.city,
+          state: draft.state,
+          country: draft.country,
+        };
+        state.profiles.push(newProfile);
+      }
 
-## Step 3: Modify your app
+      state.draftProfile = {}; // Reset draft
+    },
 
-Now that you have successfully run the app, let's make changes!
+    deleteProfile: (state, action) => {
+      state.profiles = state.profiles.filter((p) => p.id !== action.payload);
+    },
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+    editProfile: (state, action) => {
+      state.profiles = state.profiles.map((p) =>
+        p.id === action.payload.id ? action.payload : p
+      );
+    },
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+    setEditDraft: (state, action) => {
+      state.draftProfile = action.payload;
+    },
+  },
+});
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+export const {
+  setDraft,
+  addProfile,
+  deleteProfile,
+  editProfile,
+  setEditDraft,
+} = profileSlice.actions;
 
-## Congratulations! :tada:
+export default profileSlice.reducer;
 
-You've successfully run and modified your React Native App. :partying_face:
 
-### Now what?
+## Navigation Example
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+<Stack.Navigator>
+  <Stack.Screen name="Home" component={HomeScreen} />
+  <Stack.Screen name="Page1" component={BasicInfoScreen} />
+  <Stack.Screen name="Page2" component={AddressInfoScreen} />
+  <Stack.Screen name="Page3" component={SummaryScreen} />
+</Stack.Navigator>
 
-# Troubleshooting
+## Form Validation Example
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+if (!fullName || !email || !age) {
+  alert("Please fill all fields");
+  return;
+}
 
-# Learn More
+## Screenshots 
+| Basic Info----------------------------- | Address Info----------------------------- | Summary----------------------------- | Home----------------------------- |
+| ![Basic Info](./assets/screenshot1.png) | ![Address Info](./assets/screenshot2.png) | ![Summary](./assets/screenshot3.png) | ![Home](./assets/screenshot4.png) |
 
-To learn more about React Native, take a look at the following resources:
+## Demo Video
+Watch the demo video here: [Demo Link]([https://your-demo-link-here](https://drive.google.com/file/d/1w2NU6eiRmieR3_s6rx5VqvMeyUpevTvV/view?usp=sharing ))
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+## Learnings
+
+Multi-step form implementation in React Native
+Global state management with Redux Toolkit
+Navigation & conditional rendering
+Form validation and draft management
+Responsive UI using react-native-responsive-dimensions
+
+## Author
+Yogesh Bohra
+[yogeshbohra124@gmail.com](mailto:yogeshbohra124@gmail.com)
+9352642793
+[GitHub](https://github.com/BohraYogesh)
