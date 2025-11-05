@@ -38,21 +38,17 @@ All profile data is stored in **Redux** (no backend required).
    git clone https://github.com/BohraYogesh/Profile-App.git
    
 Navigate to the project folder:
-
-bash
-Copy code
+```bash
 cd Profile-App
-
-Install dependencies:
-
-bash
-Copy code
+```
+2. Install dependencies:
+```bash
 npm install
+```
 Run on Android:
-
-bash
-Copy code
+```bash
 npx react-native run-android
+```
 (Make sure an emulator or physical device is connected)
 
 ## Page Flow
@@ -78,6 +74,7 @@ Each item has Edit / Delete
 If no profiles exist, shows “No Profile Data” message
 
 ## Redux Example
+```bash
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -93,10 +90,10 @@ const profileSlice = createSlice({
       state.draftProfile = { ...state.draftProfile, ...action.payload };
     },
 
-    addProfile: (state) => {
+  addProfile: (state) => {
       const draft = state.draftProfile;
 
-      if (
+  if (
         !draft.fullName ||
         !draft.email ||
         !draft.age ||
@@ -107,7 +104,7 @@ const profileSlice = createSlice({
         return;
       }
 
-      if (draft.id) {
+  if (draft.id) {
         // Edit existing profile
         state.profiles = state.profiles.map((p) =>
           p.id === draft.id ? { ...p, ...draft } : p
@@ -126,20 +123,20 @@ const profileSlice = createSlice({
         state.profiles.push(newProfile);
       }
 
-      state.draftProfile = {}; // Reset draft
+  state.draftProfile = {}; // Reset draft
     },
 
-    deleteProfile: (state, action) => {
+  deleteProfile: (state, action) => {
       state.profiles = state.profiles.filter((p) => p.id !== action.payload);
     },
 
-    editProfile: (state, action) => {
+   editProfile: (state, action) => {
       state.profiles = state.profiles.map((p) =>
         p.id === action.payload.id ? action.payload : p
       );
     },
 
-    setEditDraft: (state, action) => {
+  setEditDraft: (state, action) => {
       state.draftProfile = action.payload;
     },
   },
@@ -154,30 +151,32 @@ export const {
 } = profileSlice.actions;
 
 export default profileSlice.reducer;
-
+```
 
 ## Navigation Example
-
+```bash
 <Stack.Navigator>
   <Stack.Screen name="Home" component={HomeScreen} />
   <Stack.Screen name="Page1" component={BasicInfoScreen} />
   <Stack.Screen name="Page2" component={AddressInfoScreen} />
   <Stack.Screen name="Page3" component={SummaryScreen} />
 </Stack.Navigator>
-
+```
 ## Form Validation Example
-
+```bash
 if (!fullName || !email || !age) {
   alert("Please fill all fields");
   return;
 }
-
+```
 ## Screenshots 
-| Basic Info----------------------------- | Address Info----------------------------- | Summary----------------------------- | Home----------------------------- |
-| ![Basic Info](./assets/screenshot1.png) | ![Address Info](./assets/screenshot2.png) | ![Summary](./assets/screenshot3.png) | ![Home](./assets/screenshot4.png) |
+| Basic Info--------------------------------- | Address Info--------------------------------- | Summary--------------------------------- | Home--------------------------------- |
+| ![Basic Info](./src/assets/screenshot1.png) | ![Address Info](./src/assets/screenshot2.png) | ![Summary](./src/assets/screenshot3.png) | ![Home](./src/assets/screenshot4.png) |
 
 ## Demo Video
-Watch the demo video here: [Demo Link]([https://your-demo-link-here](https://drive.google.com/file/d/1w2NU6eiRmieR3_s6rx5VqvMeyUpevTvV/view?usp=sharing ))
+Watch the demo video here:  
+[Watch Demo video](https://drive.google.com/file/d/1w2NU6eiRmieR3_s6rx5VqvMeyUpevTvV/view?usp=sharing)
+
 
 ## Learnings
 
