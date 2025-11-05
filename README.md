@@ -37,15 +37,15 @@ All profile data is stored in **Redux** (no backend required).
    ```bash
    git clone https://github.com/BohraYogesh/Profile-App.git
    
-Navigate to the project folder:
+2. Navigate to the project folder:
 ```bash
 cd Profile-App
 ```
-2. Install dependencies:
+3. Install dependencies:
 ```bash
 npm install
 ```
-Run on Android:
+4. Run on Android:
 ```bash
 npx react-native run-android
 ```
@@ -54,24 +54,24 @@ npx react-native run-android
 ## Page Flow
 
 ### Page 1 – Basic Info
-Fields: Full Name, Email, Age
-Button: Next → Page 2
-Data stored in Redux as draft profile
+- Fields: Full Name, Email, Age
+- Button: Next → Page 2
+- Data stored in Redux as draft profile
 
 ### Page 2 – Address Info
-Fields: City, State, Country
-Buttons: Back → Page 1, Next → Page 3
-Updates draft profile in Redux
+- Fields: City, State, Country
+- Buttons: Back → Page 1, Next → Page 3
+- Updates draft profile in Redux
 
 ### Page 3 – Summary
-Displays all collected data
-Buttons: Submit → Save to Redux, Edit → Go Back
+- Displays all collected data
+- Buttons: Submit → Save to Redux, Edit → Go Back
 
 ### Home Screen
-Lists all saved profiles
-Each item has Edit / Delete
-+ Add Profile starts a new entry
-If no profiles exist, shows “No Profile Data” message
+- Lists all saved profiles
+- Each item has Edit / Delete
+- + Add Profile starts a new entry
+- If no profiles exist, shows “No Profile Data” message
 
 ## Redux Example
 ```bash
@@ -123,7 +123,7 @@ const profileSlice = createSlice({
         state.profiles.push(newProfile);
       }
 
-  state.draftProfile = {}; // Reset draft
+  state.draftProfile = {};
     },
 
   deleteProfile: (state, action) => {
@@ -169,25 +169,19 @@ if (!fullName || !email || !age) {
   return;
 }
 ```
-## Screenshots 
-| Basic Info--------------------------------- | Address Info--------------------------------- | Summary--------------------------------- | Home--------------------------------- |
-| ![Basic Info](./src/assets/screenshot1.png) | ![Address Info](./src/assets/screenshot2.png) | ![Summary](./src/assets/screenshot3.png) | ![Home](./src/assets/screenshot4.png) |
-
 ## Demo Video
 Watch the demo video here:  
 [Watch Demo video](https://drive.google.com/file/d/1w2NU6eiRmieR3_s6rx5VqvMeyUpevTvV/view?usp=sharing)
 
-
 ## Learnings
-
-Multi-step form implementation in React Native
-Global state management with Redux Toolkit
-Navigation & conditional rendering
-Form validation and draft management
-Responsive UI using react-native-responsive-dimensions
+- Multi-step form implementation in React Native
+- Global state management with Redux Toolkit
+- Navigation & conditional rendering
+- Form validation and draft management
+- Responsive UI using react-native-responsive-dimensions
 
 ## Author
-Yogesh Bohra
-[yogeshbohra124@gmail.com](mailto:yogeshbohra124@gmail.com)
-9352642793
-[GitHub](https://github.com/BohraYogesh)
+- Yogesh Bohra
+- [yogeshbohra124@gmail.com](mailto:yogeshbohra124@gmail.com)
+- 9352642793
+- [GitHub](https://github.com/BohraYogesh)
