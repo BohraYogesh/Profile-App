@@ -39,17 +39,17 @@ All profile data is stored in **Redux** (no backend required).
    
 2. Navigate to the project folder:
 ```bash
-cd Profile-App
+  cd Profile-App
 ```
 3. Install dependencies:
 ```bash
-npm install
+  npm install
 ```
 4. Run on Android:
 ```bash
-npx react-native run-android
+  npx react-native run-android
 ```
-(Make sure an emulator or physical device is connected)
+  (Make sure an emulator or physical device is connected)
 
 ## Page Flow
 
